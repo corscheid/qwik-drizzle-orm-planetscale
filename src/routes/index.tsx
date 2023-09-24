@@ -1,12 +1,12 @@
-import { component$ } from '@builder.io/qwik';
-import { Form, routeAction$, routeLoader$ } from '@builder.io/qwik-city';
-import { auth } from '~/lib/lucia';
+import { component$ } from "@builder.io/qwik";
+import { Form, routeAction$, routeLoader$ } from "@builder.io/qwik-city";
+import { auth } from "~/lib/lucia";
 
 export const useUserLoader = routeLoader$(async (event) => {
   const authRequest = auth.handleRequest(event);
   const session = await authRequest.validate();
   if (!session) {
-    throw event.redirect(303, '/login');
+    throw event.redirect(303, "/login");
   }
 
   return session.user;
@@ -16,11 +16,11 @@ export const useLogoutUserAction = routeAction$(async (values, event) => {
   const authRequest = auth.handleRequest(event);
   const session = await authRequest.validate();
 
-  if (!session) throw event.redirect(302, '/login');
+  if (!session) throw event.redirect(302, "/login");
 
   await auth.invalidateSession(session.sessionId);
   authRequest.setSession(null);
-  throw event.redirect(302, '/login');
+  throw event.redirect(302, "/login");
 });
 
 export default component$(() => {
